@@ -3,6 +3,7 @@ Este script realiza a análise de um banco de dados do Sistema de Informação d
 O objetivo é identificar casos suspeitos que tenham **vínculo epidemiológico** com casos confirmados por laboratório.
 ## Instalação no Windows 10 (sem comandos GIT)
 1. Através da opção **Code > Download ZIP** (acima), baixar o arquivo com o conteúdo deste repositório
+![Screenshot](https://github.com/blueparrot/busca_ve/blob/main/screenshot.png)
 2. Extrair o arquivo ZIP na pasta de sua preferência
 3. Navegar até sua pasta pelo **Explorador de Arquivos** do Windows
 4. Com a pasta aberta, segure a tecla **shift** do teclado e clique na janela com o botão **direito** do mouse
