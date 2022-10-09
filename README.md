@@ -19,4 +19,4 @@ O arquivo **preferencias.ini** pode ser modificado com qualquer editor de texto.
 - Distância de casos confirmados laboratorialmente em **raio de 200 metros**
 - Intervalo de **15 dias** antes ou depois de casos confirmados laboratorialmente
 
-Caso seja editado, esse arquivo precisa ser salvo com a codificação **UTF-8**.
+Caso seja editado, o arquivo **preferencias.ini** precisa ser salvo com a codificação **UTF-8**.
