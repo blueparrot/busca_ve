@@ -1,4 +1,4 @@
-﻿#! python3
+#! python3
 import os
 import csv
 import json
@@ -42,8 +42,8 @@ def distancias_utm(caso, confirmados_periodo):
     for c in confirmados_periodo:
         confirmados_x.append(c['X'])
         confirmados_y.append(c['Y'])
-    dif_x = np.subtract(caso[COL_X],np.array(confirmados_x))
-    dif_y = np.subtract(caso[COL_Y],np.array(confirmados_y))
+    dif_x = np.subtract(int(caso[COL_X]),np.array(confirmados_x))
+    dif_y = np.subtract(int(caso[COL_Y]),np.array(confirmados_y))
     distancias = np.sqrt(np.power((dif_x),2)+np.power((dif_y),2))
     return distancias
 
@@ -54,7 +54,10 @@ def vinculo_epi(caso,confirmados_lab):
     de casos com confirmação laboratorial coletada previamente
     '''
     # Retorna ausência de vínculo epidemilógico se o caso não estiver geocodificado
-    if caso[COL_X] < 1:
+    try:
+        if int(caso[COL_X]) < 1:
+            return TEXTO_SUSP
+    except:
         return TEXTO_SUSP
 
     # Determina as datas limite do período de transmissão para o caso analisado
