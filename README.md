@@ -1,5 +1,5 @@
 # busca_ve
-Este script realiza a análise de um banco de dados do **Sistema de Informação de Agravos de Notificação - SINAN** que tenha sido previamente geocodificado em um sistema de coordenadas UTM.
+Este script realiza a análise de um banco de dados do **Sistema de Informação de Agravos de Notificação - SINAN**, em formato DBF, que tenha sido previamente geocodificado em um sistema de coordenadas UTM.
 O objetivo é identificar casos suspeitos que tenham **vínculo epidemiológico** com casos confirmados por laboratório. Os critérios avaliados são a proximidade geográfica e a incidência em um mesmo intervalo de tempo, ambos configuráveis.
 ## Instalação no Windows 10 (sem comandos GIT)
 Este passo a passo pressupõe que o **Python 3** já esteja instalado no sistema e também que tenha sido adicionado ao "PATH" do Windows.
