@@ -1,7 +1,7 @@
 # busca_ve
 Este script realiza a análise de um banco de dados do **Sistema de Informação de Agravos de Notificação - SINAN** que tenha sido previamente geocodificado em um sistema de coordenadas UTM.
 O objetivo é identificar casos suspeitos que tenham **vínculo epidemiológico** com casos confirmados por laboratório. Os critérios avaliados são a proximidade geográfica e a incidência em um mesmo intervalo de tempo, ambos configuráveis.
-## Instalação no Windows (sem comandos GIT)
+## Instalação no Windows 10 (sem comandos GIT)
 Este passo a passo pressupõe que o **Python 3** já esteja instalado no sistema e também que tenha sido adicionado ao "PATH" do Windows.
 1. Através da opção **Code > Download ZIP** (acima), baixar o arquivo com o conteúdo deste repositório
 ![Screenshot](https://github.com/blueparrot/busca_ve/blob/main/screenshot.png)
@@ -10,6 +10,8 @@ Este passo a passo pressupõe que o **Python 3** já esteja instalado no sistema
 4. Com a pasta aberta, segure a tecla **shift** do teclado e clique na janela com o botão **direito** do mouse
 5. No menu, selecione a opção **Abrir janela do PowerShell aqui**
 6. Na janela do PowerShell, digite o comando `pip install -r requirements.txt` (certifique-se de estar na mesma pasta em que os arquivos foram extraídos e onde o arquivo *requirements.txt* está presente)
+
+**Observação:** Para versões anteriores do Windows, em lugar do PowerShell poderá ser usado o **Prompt de Comando**. O processo é o mesmo.
 ## Utilização
 O arquivo DBF a ser analisado deve ser copiado para a pasta do script. Para realizar a análise, abra a janela do PowerShell nesse local (como nos passos 3, 4 e 5 da instalação) e digite o comando:
 
