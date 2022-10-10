@@ -8,8 +8,8 @@ Este passo a passo pressupõe que o **Python 3** já esteja instalado no sistema
 2. Extrair o arquivo ZIP na pasta de sua preferência
 3. Navegar até sua pasta pelo **Explorador de Arquivos** do Windows
 4. Com a pasta aberta, segure a tecla **shift** do teclado e clique na janela com o botão **direito** do mouse
-5. No menu, selecione a opção "Abrir janela do PowerShell aqui"
-6. Na janela do PowerShell, digite o comando `pip install -r requirements.txt` (certifique-se de estar na mesma pasta onde os arquivos foram extraídos)
+5. No menu, selecione a opção **Abrir janela do PowerShell aqui**
+6. Na janela do PowerShell, digite o comando `pip install -r requirements.txt` (certifique-se de estar na mesma pasta em que os arquivos foram extraídos e onde o arquivo *requirements.txt* está presente)
 ## Utilização
 O arquivo DBF a ser analisado deve ser copiado para a pasta do script. Para realizar a análise, abra a janela do PowerShell nesse local (como nos passos 3, 4 e 5 da instalação) e digite o comando:
 
