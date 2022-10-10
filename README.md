@@ -13,7 +13,7 @@ Este passo a passo pressupõe que o **Python 3** já esteja instalado no sistema
 
 **Observação:** Para versões anteriores do Windows, em lugar do PowerShell poderá ser usado o **Prompt de Comando**. O processo é semelhante.
 ## Utilização
-O arquivo DBF a ser analisado deve ser copiado para a pasta do script. Para realizar a análise, abra a janela do PowerShell nesse local (como nos passos 3, 4 e 5 da instalação) e digite o comando:
+O arquivo DBF a ser analisado deve ser copiado para a pasta do script. Para realizar a análise, abra a janela do PowerShell ou "Prompt de Comando" nesse local (como nos passos 3, 4 e 5 da instalação) e digite o comando:
 
 `python busca_ve.py`
 
