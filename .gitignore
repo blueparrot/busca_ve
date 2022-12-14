@@ -3,3 +3,7 @@
 .venv
 env/
 venv/
+
+# Datafiles
+*.csv
+*.dbf
