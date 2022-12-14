@@ -33,7 +33,6 @@ COL_CLASSIFIN = "CLASSI_FIN"
 COL_CRITERIO = "CRITERIO"
 COL_X = "X"
 COL_Y = "Y"
-CODEPAGE_ENTRADA = "cp850"
 # ==============================================================================
 #
 #                        DICIONÁRIO DE DADOS DO SINAN

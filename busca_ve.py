@@ -10,8 +10,15 @@ from tqdm import tqdm
 
 import cli
 import config
+import file_parsing as fp
 
-ABSOLUTE_PATH = os.path.dirname(__file__)
+PASTA_RAIZ = os.path.dirname(__file__)
+PASTA_ENTRADA = os.path.join(PASTA_RAIZ, "entrada")
+PASTA_RESULTADO = os.path.join(PASTA_RAIZ, "resultado")
+pastas = [PASTA_ENTRADA, PASTA_RESULTADO]
+for pasta in pastas:
+    if not os.path.exists(pasta):
+        os.makedirs(pasta)
 
 
 def distancias_utm(caso, confirmados_periodo):
@@ -83,79 +90,103 @@ def diagnostico(caso, confirmados_lab):
         return vinculo_epi(caso, confirmados_lab)
 
 
-def main():
+def busca_ve():
     """
     Função principal do script
     """
+    # Interface de seleção de arquivo
+    while True:
+        cli.clear_screen()
+        cli.print_title("BUSCA VE", color_back=color.Back.YELLOW)
+
+        print(
+            "Favor selecionar o arquivo CSV ou DBF a ser processado e pressionar <ENTER>\n"
+        )
+        print(
+            "Para que os arquivos sejam exibidos entre as opções abaixo, é necessário\ncopiá-los para a pasta:\n"
+        )
+        cli.print_title(
+            f"{PASTA_ENTRADA}",
+            color_back=color.Back.RESET,
+            color_fore=color.Fore.YELLOW,
+        )
+        arquivo = cli.file_selector(PASTA_ENTRADA, "CSV", "DBF")
+        if arquivo == "*** Atualizar lista de arquivos ***":
+            continue
+        if arquivo == "<<<      Sair do programa       <<<":
+            quit()
+        caminho_arquivo = os.path.join(PASTA_ENTRADA, arquivo)
+
+        break
+
     cli.clear_screen()
-    color.init(autoreset=True)
-    DEFAULT_FOLDERS = [
-        os.path.join(ABSOLUTE_PATH, "entrada"),
-        os.path.join(ABSOLUTE_PATH, "resultado"),
-    ]
+    cli.print_title("BUSCA VE", color_back=color.Back.YELLOW)
+    print("")
 
-    for folder in DEFAULT_FOLDERS:
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-
-    # Valida a existência do arquivo DBF informado
-    dbf_validado = False
-    while dbf_validado == False:
-        print("Favor digitar o nome do banco de dados DBF a ser analisado: ", end="")
-        DBF_AGRAVO = input()
-        if DBF_AGRAVO[-4:].upper() != ".DBF":
-            print("O arquivo informado não tem a extensão .DBF.")
-            print("(Para sair, digite CRTL + C)\n")
-            continue
-        if os.path.isfile(DBF_AGRAVO) == False:
-            print(
-                "Arquivo não encontrado. Favor digitar o caminho completo ou copiar o DBF para a pasta do programa."
-            )
-            print("(Para sair, digite CRTL + C)\n")
-            continue
-        dbf_validado = True
-
-    # Carrega DBF
-    base_sinan = DBF(DBF_AGRAVO, encoding=config.CODEPAGE_ENTRADA)
+    # Carrega os dados
+    len_dados = len(list(fp.file_streamer(caminho_arquivo)))
+    stream_dados_1 = fp.file_streamer(caminho_arquivo)
+    stream_dados_2 = fp.file_streamer(caminho_arquivo)
 
     # Coleta casos confirmados laboratorialmente
     confirmados_lab = []
-    for r in tqdm(base_sinan, desc="Coletando casos confirmados por laboratório"):
+    print("Coletando casos confirmados por laboratório:")
+    for r in tqdm(stream_dados_1, desc=color.Fore.YELLOW + "", total=len_dados):
         try:
             if (int(r[config.COL_CLASSIFIN]) in config.CLASSIFIN_CONF) and (
                 int(r[config.COL_CRITERIO]) in config.CRITERIO_LAB
             ):
-                if int(r[config.COL_X]) < 1:  # Elimina casos não geocodificados
+                if float(r[config.COL_X]) < 1:  # Elimina casos não geocodificados
                     continue
                 confirmados_lab.append(
                     {
                         config.COL_DTSIN: r[config.COL_DTSIN],
-                        config.COL_X: int(r[config.COL_X]),
-                        config.COL_Y: int(r[config.COL_Y]),
+                        config.COL_X: float(r[config.COL_X]),
+                        config.COL_Y: float(r[config.COL_Y]),
                     }
                 )
         except:
             continue
+    print("")
 
     # Cria o arquivo CSV de saída
-    RESULTADO = DBF_AGRAVO[:-4] + ".csv"
-    with open(RESULTADO, "w", newline="", encoding=config.CODEPAGE_SAIDA) as arquivo:
+    resultado, _ = os.path.splitext(arquivo)
+    resultado = os.path.join(PASTA_RESULTADO, resultado + ".csv")
+
+    # Identifica casos com vínculo e salva no resultado
+    with open(resultado, "w", newline="", encoding=config.CODEPAGE_SAIDA) as arquivo:
         writer = csv.writer(
             arquivo, delimiter=";", quotechar='"', quoting=csv.QUOTE_MINIMAL
         )
+
         # Grava cabeçalho, acrescentando a coluna 'BUSCA_VE'
-        writer.writerow(base_sinan.field_names + ["BUSCA_VE"])
-        # Grava registros do DBF, acrescentando a coluna 'BUSCA_VE'
-        for r in tqdm(base_sinan, desc="Analisando vínculos epidemiológicos"):
+        writer.writerow(fp.get_columns(caminho_arquivo) + ["BUSCA_VE"])
+
+        # Grava registros, acrescentando a coluna 'BUSCA_VE'
+        print("Analisando vínculos epidemiológicos:")
+        for r in tqdm(stream_dados_2, desc=color.Fore.YELLOW + "", total=len_dados):
             try:
-                d = [diagnostico(r, confirmados_lab)]
+                col_ve = [diagnostico(r, confirmados_lab)]
             except:
-                d = ["ERRO"]
-            writer.writerow(list(r.values()) + d)
+                col_ve = ["ERRO"]
+            writer.writerow(list(r.values()) + col_ve)
 
     # Sinaliza fim
-    print(f"Resultado da análise salvo em {RESULTADO}")
+    print("\n\nAnálise concluída com sucesso! Resultado salvo em:\n")
+    cli.print_title(
+        f"{resultado}", color_back=color.Back.BLACK, color_fore=color.Fore.YELLOW
+    )
 
+    # Opção de repetir
+    print("Processar mais um arquivo?")
+    repetir = cli.options("Sim", "Fechar programa")
+    if repetir == "Sim":
+        busca_ve()
+
+
+def main():
+    color.init(autoreset=True)
+    busca_ve()
     color.deinit()
 
 

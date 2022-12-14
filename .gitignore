@@ -132,3 +132,6 @@ dmypy.json
 # Datafiles
 *.csv
 *.dbf
+
+# Bat files
+*.bat

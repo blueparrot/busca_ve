@@ -7,8 +7,6 @@ import inquirer
 from inquirer.themes import Default
 from blessed import Terminal
 
-# from halo import Halo
-
 term = Terminal()
 
 
@@ -19,14 +17,14 @@ class CustomTheme(Default):
 
     def __init__(self):
         super().__init__()
-        self.Question.mark_color = term.green
-        self.Question.brackets_color = term.green
-        self.List.selection_color = term.black_on_green
+        self.Question.mark_color = term.yellow
+        self.Question.brackets_color = term.yellow
+        self.List.selection_color = term.black_on_yellow
         self.List.selection_cursor = " >"
 
 
 def clear_screen():
-    # os.system("mode con: cols=80 lines=30")
+    os.system("mode con: cols=80 lines=30")
     os.system("cls" if os.name == "nt" else "clear")
 
 
@@ -48,19 +46,6 @@ def print_title(
     )
 
 
-def print_result(
-    legend: str,
-    result: str,
-    indent_spacing=5,
-    color_fore=color.Fore.BLUE,
-    color_style=color.Style.BRIGHT,
-) -> None:
-    """
-    Prints indented colored text
-    """
-    print(" " * indent_spacing + legend + ": " + color_fore + color_style + result)
-
-
 def file_selector(
     folder: Union[str, os.PathLike], *filetypes: str
 ) -> Union[str, os.PathLike]:
@@ -68,7 +53,7 @@ def file_selector(
     File selection menu
     """
     options = []
-    options.extend(["*** Atualizar lista de arquivos"])
+    options.extend(["*** Atualizar lista de arquivos ***"])
     file_options = []
     for ft in filetypes:
         file_options.extend(
@@ -76,7 +61,7 @@ def file_selector(
         )
     file_options = sorted(file_options)
     options.extend(file_options)
-    options.extend(["<<< Retornar ao menu inicial"])
+    options.extend(["<<<      Sair do programa       <<<"])
     q = [
         inquirer.List("option", message="", choices=options, carousel=True),
     ]
@@ -86,22 +71,3 @@ def file_selector(
 def options(*option_list: str) -> str:
     q = [inquirer.List("opt", choices=option_list, carousel=True)]
     return inquirer.prompt(q, theme=CustomTheme())["opt"]
-
-
-def text_question(question: str) -> str:
-    q = [inquirer.Text("answer", message=question)]
-    return inquirer.prompt(q, theme=CustomTheme())["answer"]
-
-
-# def spinner(text: str):
-#     """
-#     Presets the spinner in the Halo package
-#     """
-#     return Halo(
-#         text=text,
-#         spinner={
-#             "interval": 200,
-#             "frames": [".  ", ".. ", "...", " ..", "  .", "   "],
-#         },
-#         color="green",
-#     )
