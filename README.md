@@ -45,8 +45,8 @@ O processo pode ser ligeiramente diferente a dependar da distribuição do Pytho
 **NOTA: Caso opte por instalar os pacotes na "raiz" do Python, sem o uso de ambiente virtual, os passos 7 e 8 da instalação e o passo 2 da execução podem ser ignorados.**
 
 ## Preferências
-O arquivo **preferencias.ini** pode ser modificado com qualquer editor de texto. Através dele podem ser feitos ajustes a eventuais alterações nos "dicionários de dados" do SINAN ou nos parâmetros considerados para vínculo epidemiológico. Como padrão, estão configurados os seguintes critérios:
+O arquivo **config.py** pode ser modificado com qualquer editor de texto. Através dele podem ser feitos ajustes a eventuais alterações nos "dicionários de dados" do SINAN ou nos parâmetros considerados para vínculo epidemiológico. Como padrão, estão configurados os seguintes critérios:
 - Distância de casos confirmados laboratorialmente em **raio de 200 metros**
 - Intervalo de **15 dias** antes ou depois de casos confirmados laboratorialmente
 
-Caso seja editado, o arquivo **preferencias.ini** precisa ser salvo com a codificação **UTF-8**.
+Caso seja editado, o arquivo **config.py** precisa ser salvo com a codificação **UTF-8**.
