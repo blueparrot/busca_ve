@@ -3,12 +3,15 @@ import os
 import csv
 import datetime
 
+import colorama as color
 import numpy as np
 from dbfread import DBF
 from tqdm import tqdm
 
 import cli
 import config
+
+ABSOLUTE_PATH = os.path.dirname(__file__)
 
 
 def distancias_utm(caso, confirmados_periodo):
@@ -84,7 +87,16 @@ def main():
     """
     Função principal do script
     """
-    os.system("cls")
+    cli.clear_screen()
+    color.init(autoreset=True)
+    DEFAULT_FOLDERS = [
+        os.path.join(ABSOLUTE_PATH, "entrada"),
+        os.path.join(ABSOLUTE_PATH, "resultado"),
+    ]
+
+    for folder in DEFAULT_FOLDERS:
+        if not os.path.exists(folder):
+            os.makedirs(folder)
 
     # Valida a existência do arquivo DBF informado
     dbf_validado = False
@@ -143,6 +155,8 @@ def main():
 
     # Sinaliza fim
     print(f"Resultado da análise salvo em {RESULTADO}")
+
+    color.deinit()
 
 
 if __name__ == "__main__":
