@@ -7,41 +7,19 @@ import numpy as np
 from dbfread import DBF
 from tqdm import tqdm
 
+import cli
 import config
-
-# # Carrega o arquivo preferencias.ini e atribui variáveis globais
-# preferencias = ConfigParser()
-# preferencias.read('preferencias.ini', encoding='utf-8')
-# PERIODO_ANTES = int(preferencias['CRITERIOS_VE']['PERIODO_ANTES'])
-# PERIODO_DEPOIS = int(preferencias['CRITERIOS_VE']['PERIODO_DEPOIS'])
-# RAIO = int(preferencias['CRITERIOS_VE']['RAIO'])
-# COL_DTSIN = preferencias['BANCO']['COL_DTSIN']
-# COL_CLASSIFIN = preferencias['BANCO']['COL_CLASSIFIN']
-# COL_CRITERIO = preferencias['BANCO']['COL_CRITERIO']
-# COL_X = preferencias['BANCO']['COL_X']
-# COL_Y = preferencias['BANCO']['COL_Y']
-# CODEPAGE = preferencias['BANCO']['CODEPAGE']
-# CLASSIFIN_CONF = json.loads(preferencias['VALORES']['CLASSIFIN_CONF'])
-# CLASSIFIN_DESC = json.loads(preferencias['VALORES']['CLASSIFIN_DESC'])
-# CRITERIO_LAB = json.loads(preferencias['VALORES']['CRITERIO_LAB'])
-# TEXTO_CONF_LAB = preferencias['TEXTO_SAIDA']['TEXTO_CONF_LAB']
-# TEXTO_CONF_VE = preferencias['TEXTO_SAIDA']['TEXTO_CONF_VE']
-# TEXTO_SUSP_VE = preferencias['TEXTO_SAIDA']['TEXTO_SUSP_VE']
-# TEXTO_SUSP = preferencias['TEXTO_SAIDA']['TEXTO_SUSP']
-# TEXTO_DESCART = preferencias['TEXTO_SAIDA']['TEXTO_DESCART']
-# CODEPAGE_SAIDA = preferencias['TEXTO_SAIDA']['CODEPAGE_SAIDA']
 
 
 def distancias_utm(caso, confirmados_periodo):
     """
-    Calcula distância em metros entre um caso e a seleção de casos confirmados
-    que ocorreram no mesmo período
+    Calcula distância em metros entre um caso e a seleção de casos confirmados que ocorreram no mesmo período
     """
     confirmados_x = []
     confirmados_y = []
     for c in confirmados_periodo:
-        confirmados_x.append(c["X"])
-        confirmados_y.append(c["Y"])
+        confirmados_x.append(c[config.COL_X])
+        confirmados_y.append(c[config.COL_Y])
     dif_x = np.subtract(int(caso[config.COL_X]), np.array(confirmados_x))
     dif_y = np.subtract(int(caso[config.COL_Y]), np.array(confirmados_y))
     distancias = np.sqrt(np.power((dif_x), 2) + np.power((dif_y), 2))
@@ -50,8 +28,7 @@ def distancias_utm(caso, confirmados_periodo):
 
 def vinculo_epi(caso, confirmados_lab):
     """
-    Pesquisa o vínculo epidemiológico de um caso suspeito, considerando a lista
-    de casos com confirmação laboratorial coletada previamente
+    Pesquisa o vínculo epidemiológico de um caso suspeito, considerando a lista de casos com confirmação laboratorial coletada previamente
     """
     # Retorna ausência de vínculo epidemilógico se o caso não estiver geocodificado
     try:
@@ -67,9 +44,7 @@ def vinculo_epi(caso, confirmados_lab):
     # Coleta os casos confirmados com início dentro do período de transmissão
     confirmados_periodo = []
     for c in confirmados_lab:
-        if (c["DTSIN"] >= dt_min) and (
-            c["DTSIN"] <= dt_max
-        ):  # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        if (c[config.COL_DTSIN] >= dt_min) and (c[config.COL_DTSIN] <= dt_max):
             confirmados_periodo.append(c)
 
     # Retorna ausência de vínculo epidemilógico se não houver casos confirmados no período
@@ -88,8 +63,7 @@ def vinculo_epi(caso, confirmados_lab):
 
 def diagnostico(caso, confirmados_lab):
     """
-    Analisa o diagnóstico de um caso do banco de dados, considerando os dados de
-    classificação final e critério de diagnóstico
+    Analisa o diagnóstico de um caso do banco de dados, considerando os dados de classificação final e critério de diagnóstico
     Para casos suspeitos, é acionada a busca por vínculos epidemiológicos
     """
     try:
@@ -143,9 +117,9 @@ def main():
                     continue
                 confirmados_lab.append(
                     {
-                        "DTSIN": r[config.COL_DTSIN],
-                        "X": int(r[config.COL_X]),
-                        "Y": int(r[config.COL_Y]),
+                        config.COL_DTSIN: r[config.COL_DTSIN],
+                        config.COL_X: int(r[config.COL_X]),
+                        config.COL_Y: int(r[config.COL_Y]),
                     }
                 )
         except:

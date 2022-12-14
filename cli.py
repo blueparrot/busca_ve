@@ -6,7 +6,8 @@ import colorama as color
 import inquirer
 from inquirer.themes import Default
 from blessed import Terminal
-from halo import Halo
+
+# from halo import Halo
 
 term = Terminal()
 
@@ -108,15 +109,15 @@ def text_question(question: str) -> str:
     return inquirer.prompt(q, theme=CustomTheme())["answer"]
 
 
-def spinner(text: str):
-    """
-    Presets the spinner in the Halo package
-    """
-    return Halo(
-        text=text,
-        spinner={
-            "interval": 200,
-            "frames": [".  ", ".. ", "...", " ..", "  .", "   "],
-        },
-        color="green",
-    )
+# def spinner(text: str):
+#     """
+#     Presets the spinner in the Halo package
+#     """
+#     return Halo(
+#         text=text,
+#         spinner={
+#             "interval": 200,
+#             "frames": [".  ", ".. ", "...", " ..", "  .", "   "],
+#         },
+#         color="green",
+#     )
