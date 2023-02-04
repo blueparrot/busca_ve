@@ -48,13 +48,17 @@ def vinculo_epi(caso, confirmados_lab):
         return config.TEXTO_SUSP
 
     # Determina as datas limite do período de transmissão para o caso analisado
-    dt_min = caso[config.COL_DTSIN] - datetime.timedelta(days=config.PERIODO_ANTES)
-    dt_max = caso[config.COL_DTSIN] + datetime.timedelta(days=config.PERIODO_DEPOIS)
+    dt_sint = caso[config.COL_DTSIN]
+    dt_sint = datetime.date.fromisoformat(dt_sint) if type(dt_sint) == str else dt_sint
+    dt_min = dt_sint - datetime.timedelta(days=config.PERIODO_ANTES)
+    dt_max = dt_sint + datetime.timedelta(days=config.PERIODO_DEPOIS)
 
     # Coleta os casos confirmados com início dentro do período de transmissão
     confirmados_periodo = []
     for c in confirmados_lab:
-        if (c[config.COL_DTSIN] >= dt_min) and (c[config.COL_DTSIN] <= dt_max):
+        dt_sint_conf = c[config.COL_DTSIN]
+        dt_sint_conf = datetime.date.fromisoformat(dt_sint_conf) if type(dt_sint_conf) == str else dt_sint_conf
+        if (dt_sint_conf >= dt_min) and (dt_sint_conf <= dt_max):
             confirmados_periodo.append(c)
 
     # Retorna ausência de vínculo epidemilógico se não houver casos confirmados no período
